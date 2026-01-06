@@ -1,11 +1,19 @@
 'use client';
 
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import Image from "next/image";
 import { db } from '@/lib/firebase';
 import { collection, addDoc, serverTimestamp } from 'firebase/firestore';
 
+interface BeforeInstallPromptEvent extends Event {
+  prompt: () => Promise<void>;
+  userChoice: Promise<{ outcome: 'accepted' | 'dismissed' }>;
+}
+
 export default function Home() {
+  const [installPrompt, setInstallPrompt] = useState<BeforeInstallPromptEvent | null>(null);
+  const [isInstalled, setIsInstalled] = useState(false);
+
   useEffect(() => {
     const addTestEntry = async () => {
       try {
@@ -22,22 +30,38 @@ export default function Home() {
 
     addTestEntry();
 
-    // Ensure a SW registers even if next-pwa doesn't inject for app router
-    if (typeof window !== 'undefined' && 'serviceWorker' in navigator) {
-      const isProd = process.env.NODE_ENV === 'production';
-      const basePath = isProd ? '/explorando' : '';
-      const swUrl = `${basePath}/sw.js`;
-      const scope = `${basePath}/`;
-      navigator.serviceWorker
-        .register(swUrl, { scope })
-        .then((reg) => {
-          console.log('✓ Service worker registered:', reg.scope);
-        })
-        .catch((err) => {
-          console.error('✗ Service worker registration failed:', err);
-        });
+    // Listen for beforeinstallprompt event
+    const handleBeforeInstallPrompt = (e: Event) => {
+      e.preventDefault();
+      setInstallPrompt(e as BeforeInstallPromptEvent);
+      console.log('✓ Install prompt ready');
+    };
+
+    // Check if app is already installed
+    if (window.matchMedia('(display-mode: standalone)').matches) {
+      setIsInstalled(true);
+      console.log('✓ App is running as standalone');
     }
+
+    window.addEventListener('beforeinstallprompt', handleBeforeInstallPrompt);
+    window.addEventListener('appinstalled', () => {
+      setIsInstalled(true);
+      setInstallPrompt(null);
+      console.log('✓ App installed');
+    });
+
+    return () => {
+      window.removeEventListener('beforeinstallprompt', handleBeforeInstallPrompt);
+    };
   }, []);
+
+  const handleInstall = async () => {
+    if (!installPrompt) return;
+    installPrompt.prompt();
+    const { outcome } = await installPrompt.userChoice;
+    console.log(`User response: ${outcome}`);
+    setInstallPrompt(null);
+  };
 
   return (
     <div className="flex min-h-screen items-center justify-center bg-zinc-50 font-sans dark:bg-black">
@@ -73,6 +97,19 @@ export default function Home() {
           </p>
         </div>
         <div className="flex flex-col gap-4 text-base font-medium sm:flex-row">
+          {installPrompt && !isInstalled && (
+            <button
+              onClick={handleInstall}
+              className="flex h-12 w-full items-center justify-center gap-2 rounded-full bg-blue-600 px-5 text-white transition-colors hover:bg-blue-700 dark:hover:bg-blue-500 md:w-auto"
+            >
+              📲 Install App
+            </button>
+          )}
+          {isInstalled && (
+            <div className="flex h-12 w-full items-center justify-center rounded-full bg-green-100 px-5 text-green-800 dark:bg-green-900 dark:text-green-100">
+              ✓ App Installed
+            </div>
+          )}
           <a
             className="flex h-12 w-full items-center justify-center gap-2 rounded-full bg-foreground px-5 text-background transition-colors hover:bg-[#383838] dark:hover:bg-[#ccc] md:w-[158px]"
             href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
