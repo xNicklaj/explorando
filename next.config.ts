@@ -1,4 +1,5 @@
 import type { NextConfig } from "next";
+import withPWA from 'next-pwa';
 
 const isProd = process.env.NODE_ENV === 'production';
 const nextConfig: NextConfig = {
@@ -10,6 +11,15 @@ const nextConfig: NextConfig = {
     loader: 'custom',
     loaderFile: './utils/image-loader.ts', // Path to the file we created above
   },
+  turbopack: {},
+  typescript: {
+    tsconfigPath: './tsconfig.json',
+  },
 };
 
-export default nextConfig;
+export default withPWA({
+  dest: 'public',
+  register: true,
+  skipWaiting: true,
+  customWorkerDir: 'public',
+})(nextConfig);
