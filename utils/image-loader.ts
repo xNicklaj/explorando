@@ -2,9 +2,14 @@ const isProd = process.env.NODE_ENV === 'production';
 const basePath = isProd ? '/explorando' : '';
 
 export default function imageLoader({ src }: { src: string }) {
-  // If the src already starts with http, don't change it
-  if (src.startsWith('http')) return src;
+  const basePath = '/explorando';
   
-  // Prepend the basePath to the source
-  return `${basePath}${src}`;
+
+  // If we are on GitHub Actions, use the prefix
+  if (process.env.NEXT_PUBLIC_GITHUB_ACTIONS === 'true') {
+    console.log(`Using basePath: ${basePath}`);
+    return `${basePath}${src}`;
+  }
+  
+  return src;
 }
