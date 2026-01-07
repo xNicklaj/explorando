@@ -1,3 +1,4 @@
+/*
 console.log('API key:', process.env.NEXT_PUBLIC_FIREBASE_API_KEY);
 console.log('Project ID:', getApp().options.projectId);
 
@@ -15,3 +16,4 @@ console.error('✗ Error adding test entry:', error);
 }
 
 addTestEntry();
+*/
