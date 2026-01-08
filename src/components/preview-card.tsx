@@ -21,7 +21,7 @@ export const PreviewCard: React.FC<PreviewCardProps> = ({
             initial={{ opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
             >
-                <Image src={imageUrl || ''} alt={title} width={200} height={350} className="bg-gray-400 m-2 text-white rounded-xl w-[200px] h-[350px] object-cover"/>
+                <Image src={imageUrl || ''} alt={title} width={250} height={300} className="bg-gray-400 m-2 text-white rounded-xl w-[250px] h-[300px] object-cover"/>
                 <span className="text-left px-3 pb-2 text-xl">{title}</span>
             </motion.button>
         </Link>
