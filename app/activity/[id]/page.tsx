@@ -32,10 +32,10 @@ export default async function ActivityDetail({ params }: { params: Promise<{ id:
 
     return (
         <div className="flex h-full bg-white flex-col text-gray-900">
-            <ImageCarousel images={activityData["Gallery"] || []} />
-            <div className="p-6 flex flex-col gap-1 flex-1 overflow-y-auto">
-                <h1 className="text-2xl font-bold text-gray-900">{activityData["Title"]}</h1>
-                <div>{activityData["Description"]}</div>
+            <div className="flex flex-col gap-1 flex-1 overflow-y-auto">
+                <ImageCarousel images={activityData["Gallery"] || []} className="min-h-[250px] max-h-[250px]"/>
+                <h1 className="text-2xl font-bold text-gray-900 px-6 pt-6">{activityData["Title"]}</h1>
+                <div className="px-6 pb-6">{activityData["Description"]}</div>
             </div>
             <div className="p-6 pt-0 flex w-full flex-col gap-2">
                 <Button className="w-full"><FaPlay />Avvia</Button>

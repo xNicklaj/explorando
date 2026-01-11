@@ -10,9 +10,10 @@ import { LazyImage } from './lazy-image';
 
 interface ImageCarouselProps {
     images: string[];
+    className?: string;
 }
 
-export function ImageCarousel({ images }: ImageCarouselProps) {
+export function ImageCarousel({ images, className = '' }: ImageCarouselProps) {
     const [emblaRef] = useEmblaCarousel({ loop: true });
 
     if (!images || images.length === 0) {
@@ -20,7 +21,7 @@ export function ImageCarousel({ images }: ImageCarouselProps) {
     }
 
     return (
-        <div className="embla overflow-hidden" ref={emblaRef}>
+        <div className={`embla overflow-hidden ${className}`} ref={emblaRef}>
             <div className="embla__container flex">
                 {images.map((imageUrl, index) => (
                     <motion.div key={index} className="embla__slide flex-[0_0_100%] min-w-0"
