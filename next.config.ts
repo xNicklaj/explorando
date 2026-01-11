@@ -3,7 +3,7 @@ import withPWA from 'next-pwa';
 
 const isProd = process.env.NODE_ENV === 'production';
 const nextConfig: NextConfig = {
-  // Ensure this matches what you use in your components
+  output: 'export',
   basePath: isProd ? '/explorando' : '', 
   assetPrefix: isProd ? '/explorando/' : '',
   images: {
