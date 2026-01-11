@@ -25,7 +25,7 @@ export function DistanceDisplay({ activityLocation }: DistanceDisplayProps) {
 
     return (
         <div className="absolute bottom-0 left-0 p-4 m-2 bg-gray-50 z-10 rounded text-black pointer-events-none">
-            {distance.toFixed(1)}KM
+            {distance.toFixed(0)} KM
         </div>
     );
 }
