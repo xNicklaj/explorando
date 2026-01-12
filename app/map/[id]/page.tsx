@@ -20,7 +20,8 @@ export default function MapPage({ params }: { params: Promise<{ id: string }> })
                 const { id } = await params;
                 const activityDoc = await getDoc(doc(db, 'Activity', id));
                 const data = activityDoc.exists() ? activityDoc.data() : null;
-                setActivityData(data);
+                if(data !== null)
+                    setActivityData(data["Position"]);
             } catch (error) {
                 console.error('Failed to fetch activity:', error);
             } finally {

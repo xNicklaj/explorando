@@ -16,13 +16,25 @@ export function useGeolocation() {
             return;
         }
 
-        navigator.geolocation.getCurrentPosition(
-            (pos) => setPosition({
-                latitude: pos.coords.latitude,
-                longitude: pos.coords.longitude,
-            }),
-            (err) => setError(err.message)
+        const watchId = navigator.geolocation.watchPosition(
+            (pos) => {
+                setPosition({
+                    latitude: pos.coords.latitude,
+                    longitude: pos.coords.longitude,
+                });
+                setError(null);
+            },
+            (err) => setError(err.message),
+            {
+                enableHighAccuracy: true,
+                timeout: 10000,
+                maximumAge: 5000,
+            }
         );
+
+        return () => {
+            try { navigator.geolocation.clearWatch(watchId); } catch {}
+        };
     }, []);
 
     return { position, error };
