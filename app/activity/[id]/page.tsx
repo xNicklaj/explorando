@@ -1,5 +1,5 @@
 import { db } from '@/lib/firebase';
-import { doc, getDoc, collection, getDocs } from 'firebase/firestore';
+import { doc, getDoc } from 'firebase/firestore';
 
 import { Button } from '@/src/components/custom-button';
 import { ImageCarousel } from '@/src/components/image-carousel';
@@ -8,14 +8,6 @@ import { DistanceDisplay } from '@/src/components/distance-display';
 import { FaPlay } from "react-icons/fa";
 import { FaCalendarAlt } from "react-icons/fa";
 import { FaBookmark } from "react-icons/fa";
-
-export async function generateStaticParams() {
-    const activitiesSnapshot = await getDocs(collection(db, 'Activity'));
-    
-    return activitiesSnapshot.docs.map((doc) => ({
-        id: doc.id,
-    }));
-}
 
 export default async function ActivityDetail({ params }: { params: Promise<{ id: string }> }) {
     const { id } = await params;
