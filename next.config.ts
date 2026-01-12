@@ -16,6 +16,5 @@ export default withPWA({
   dest: 'public',
   register: true,
   skipWaiting: true,
-  customWorkerDir: 'public',
-  sw: 'sw.js',
+  disable: process.env.NODE_ENV === 'development',
 })(nextConfig);

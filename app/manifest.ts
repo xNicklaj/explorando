@@ -3,26 +3,25 @@ import type { MetadataRoute } from 'next'
 export const dynamic = 'force-static'
 
 export default function manifest(): MetadataRoute.Manifest {
-  const isProd = process.env.NODE_ENV === 'production';
-  const basePath = false ? '/explorando' : '';
-  
   return {
     name: 'eXplorando',
     short_name: 'eXplorando',
     description: 'A Progressive Web App built with Next.js',
-    start_url: basePath ? `${basePath}/` : '/',
+    id: '/',
+    scope: '/',
+    start_url: '/',
     display: 'standalone',
     background_color: '#ffffff',
     theme_color: '#000000',
     icons: [
       {
-        src: `${basePath || '/'}/icon-192x192.png`,
+        src: '/icon-192x192.png',
         sizes: '192x192',
         type: 'image/png',
         purpose: 'any',
       },
       {
-        src: `${basePath || '/'}/icon-512x512.png`,
+        src: '/icon-512x512.png',
         sizes: '512x512',
         type: 'image/png',
         purpose: 'any',
