@@ -47,5 +47,13 @@ export default function MapPage({ params }: { params: Promise<{ id: string }> })
     }
 
     console.log('MapPage: rendering MapContent');
-    return <MapContent activityData={activityData} />;
+    return (
+        <div className="w-full h-screen">
+            <div className="p-4 bg-blue-500 text-white">
+                <p>Page loaded! Activity data: {JSON.stringify(activityData)}</p>
+                <p>Loading: {String(loading)}, Error: {error}</p>
+            </div>
+            <MapContent activityData={activityData} />
+        </div>
+    );
 }
