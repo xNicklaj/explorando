@@ -8,7 +8,7 @@ import { doc, getDoc } from 'firebase/firestore';
     loading: () => <div className="w-full h-screen bg-gray-200 animate-pulse" />
 }); */
 
-export default function MapPage({ params }: { params: Promise<{ id: string }> }) {
+export default async function MapPage({ params }: { params: Promise<{ id: string }> }) {
 /*     const [activityData, setActivityData] = useState<any>(null);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
