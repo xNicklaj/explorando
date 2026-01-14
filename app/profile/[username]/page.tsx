@@ -98,7 +98,10 @@ export default function Profile({ params }: { params: Promise<{ username: string
                   
                   // Fetch the Activity document
                   const activityDocData = feedData.Activity ? await getDoc(feedData.Activity) : null;
-                  const activityInfo = activityDocData?.exists() ? activityDocData.data() : null;
+                  const activityInfo = activityDocData?.exists() ? {
+                      id: activityDocData.id,
+                      ...(activityDocData.data() || {})
+                  } : null;
                   
                   return {
                       id: feedDoc.id,
@@ -109,6 +112,7 @@ export default function Profile({ params }: { params: Promise<{ username: string
               });
               
               const feedData = await Promise.all(feedDataPromises);
+              console.log(feedData);
               setFeedItems(feedData);
 
           } catch (err: any) {
@@ -130,16 +134,18 @@ export default function Profile({ params }: { params: Promise<{ username: string
         <div className="flex flex-row p-4">
           {/* Avatar */}
           {loading ? (
-            <div className="w-[100px] h-[100px] m-4 rounded-full bg-gray-200 animate-pulse flex-shrink-0" />
+            <div className="w-[6px] h-[60px] m-4 rounded-full bg-gray-200 animate-pulse flex-shrink-0" />
           ) : (
             userData?.["Avatar"]?.[1] && (
-              <Image 
-                src={userData["Avatar"][1]} 
-                alt="Avatar" 
-                width={100} 
-                height={100} 
-                className="rounded-full m-4" 
-              />
+              <div className="flex justify-center items-start m-4 ml-2">
+                <Image 
+                  src={userData["Avatar"][1]} 
+                  alt="Avatar" 
+                  width={60} 
+                  height={60} 
+                  className="rounded-full object-cover flex-shrink-0" 
+                />
+              </div>
             )
           )}
           
@@ -155,7 +161,7 @@ export default function Profile({ params }: { params: Promise<{ username: string
                 ) : (
                   <>
                     <div>{userData?.["DisplayName"]}</div>
-                    <div className="text-gray-600">{userData?.["Username"]}</div>
+                    <div className="text-gray-600 text-lg">{userData?.["Username"]}</div>
                   </>
                 )}
               </div>
@@ -232,6 +238,7 @@ export default function Profile({ params }: { params: Promise<{ username: string
                 FeedTitle={item.Activity["Title"]}
                 FeedContext="ha completato"
                 FeedContent={item.Comment}
+                ActivityId={item.Activity.id}
               />
             })
           ) : (

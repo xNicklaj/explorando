@@ -1,5 +1,6 @@
 import Image from "next/image";
 import { motion } from "framer-motion";
+import Link from "next/link";
 
 type FeedData = {
     Date: any,
@@ -9,6 +10,7 @@ type FeedData = {
     FeedTitle: string,
     FeedContext: string,
     FeedContent: string,
+    ActivityId: string,
 }
 
 const Feed = (data: FeedData) => {
@@ -33,24 +35,26 @@ const Feed = (data: FeedData) => {
         // Capitalize first letter, lowercase the rest (camel-case)
         const formattedMonth = month.charAt(0).toUpperCase() + month.slice(1).toLowerCase();
         
-        return `${day} ${formattedMonth} ${year}`;
+        return `${day} ${formattedMonth} ${false ? year.toString().substring(2) : ""}`;
     };
 
     return (
         <motion.div className="flex flex-col w-full p-3 text-black" initial={{ opacity: 0, x: 10 }} animate={{ opacity: 1, x: 0 }} transition={{ duration: 0.3, ease: "easeOut", delay: 0.1 }}>
             <div className="flex flex-row px-3">
-                <Image 
-                    src={data.UserAvatar}
-                    alt="User Avatar"
-                    width={20}
-                    height={20}
-                    className="rounded-full mr-4 flex-shrink-0"
-                />
+                <div className="mr-1">
+                    <Image 
+                        src={data.UserAvatar}
+                        alt="User Avatar"
+                        width={20}
+                        height={20}
+                        className="rounded-full flex-shrink-0"
+                    />
+                </div>
                 <span className="text-accent-500 mr-1">{data.Username}</span>
                 <span className="text-gray-600">{data.FeedContext}</span>
                 <span className="ml-auto">{formatDate(data.Date)}</span>
             </div>
-            <div className="flex flex-row p-2 bg-gray-300 rounded mt-2">
+            <Link className="flex flex-row p-2 bg-gray-300 rounded mt-2" href={`/activity/${data.ActivityId}`}>
                 <Image 
                     src={data.FeedIcon}
                     alt="Feed Icon"
@@ -62,7 +66,7 @@ const Feed = (data: FeedData) => {
                     <h2 className="text-xl">{data.FeedTitle}</h2>
                     <p className="text-gray-700 ">{data.FeedContent}</p>
                 </div>
-            </div>
+            </Link>
         </motion.div>
     )
 }

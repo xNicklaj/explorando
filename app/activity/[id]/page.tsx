@@ -38,7 +38,6 @@ export default async function ActivityDetail({ params }: { params: Promise<{ id:
                 <Button layoutClass="w-full" href={`/map/${id}`}><FaPlay />Avvia</Button>
                 <div className="flex flex-row w-full gap-2">
                     <Button layoutClass="w-full"><FaCalendarAlt />Partecipa</Button>
-                    <Button layoutClass="w-full"><FaBookmark />Salva</Button>
                 </div>
             </div>
         </div>
