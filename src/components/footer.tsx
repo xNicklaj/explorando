@@ -22,7 +22,7 @@ export const Footer: React.FC<FooterProps> = ({ className } ) => {
   const navItems = [
     { href: "/", icon: FaHome },
     { href: "/community", icon: FaPeopleGroup },
-    { href: "/profile", icon: IoIosPerson },
+    { href: "/me", icon: IoIosPerson },
   ];
 
   useEffect(() => {
@@ -60,7 +60,7 @@ export const Footer: React.FC<FooterProps> = ({ className } ) => {
     <footer className={`flex w-full p-4 text-black bg-white justify-around text-3xl ${className || ""}`}>
       {navItems.map(({ href, icon: Icon }) => {
         const isActive = pathname === href;
-        const isProfile = href === "/profile";
+        const isProfile = href === "/me" || href === "/profile";
         const avatarSrc = isProfile
           ? (isActive ? (avatarActive || avatarDefault) : avatarDefault)
           : null;
