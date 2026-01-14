@@ -23,6 +23,7 @@ export function QuizWrapper({ quizData, totalXP, currentXp = 0 }: { quizData: Qu
     const [passedQuizzes, setPassedQuizzes] = useState(0);
     const [isComplete, setIsComplete] = useState(false);
     const [xpSaved, setXpSaved] = useState(false);
+    const totalQuizzes = quizData.length || 1;
 
     const handleSubmit = (selectedAnswer: number) => {
         const isCorrect = selectedAnswer === quizData[currentQuiz].Correct;
@@ -46,7 +47,7 @@ export function QuizWrapper({ quizData, totalXP, currentXp = 0 }: { quizData: Qu
         if (isComplete && !xpSaved) {
             const saveXP = async () => {
                 try {
-                    const earnedXP = Math.round(totalXP * (passedQuizzes / quizData.length));
+                    const earnedXP = Math.max(3, Math.round(totalXP * (passedQuizzes / totalQuizzes)));
                     const finalXp = currentXp + earnedXP;
                     
                     const userIdSnapshot = await get(ref(rtdb, 'userid'));
@@ -65,7 +66,7 @@ export function QuizWrapper({ quizData, totalXP, currentXp = 0 }: { quizData: Qu
             
             saveXP();
         }
-    }, [isComplete, xpSaved, totalXP, passedQuizzes, quizData.length, currentXp]);
+    }, [isComplete, xpSaved, totalXP, passedQuizzes, totalQuizzes, currentXp]);
 
     // Navigate to home after 7 seconds
     useEffect(() => {
@@ -79,7 +80,7 @@ export function QuizWrapper({ quizData, totalXP, currentXp = 0 }: { quizData: Qu
     }, [isComplete, router]);
 
     if (isComplete) {
-        const earnedXP = Math.round(totalXP * (passedQuizzes / quizData.length));
+        const earnedXP = Math.max(3, Math.round(totalXP * (passedQuizzes / totalQuizzes)));
         const finalXp = currentXp + earnedXP;
         const previousLevel = getLevelInfo(currentXp).level;
         const info = getLevelInfo(finalXp);
