@@ -32,15 +32,9 @@ export const Footer: React.FC<FooterProps> = ({ className } ) => {
         if (!alive) return;
 
         const avatar = userData?.Avatar;
-        if (Array.isArray(avatar) && avatar.length >= 2) {
-          const first = typeof avatar[0] === 'string' ? avatar[0].trim() : '';
-          const second = typeof avatar[1] === 'string' ? avatar[1].trim() : '';
-          if (first) setAvatarDefault(first);
-          if (second) setAvatarActive(second);
-        } else if (typeof avatar === 'string' && avatar.trim().length > 0) {
-          const trimmed = avatar.trim();
-          setAvatarDefault(trimmed);
-          setAvatarActive(trimmed);
+        if (Array.isArray(avatar)) {
+          if (avatar[0]) setAvatarDefault(avatar[0]);
+          if (avatar[1]) setAvatarActive(avatar[1]);
         }
 
         if (userData?.Username) {
