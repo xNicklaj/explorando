@@ -7,6 +7,7 @@ import { collection, getDocs, query, where, doc, getDoc, orderBy } from 'firebas
 import { db } from '@/lib/firebase';
 import { levelFromXp } from '@/lib/level';
 import Feed from '@/src/components/feed';
+import { FeedSkeleton } from '@/src/components/feed-skeleton';
 
 interface UserData {
   username: string;
@@ -206,24 +207,9 @@ export default function Profile({ params }: { params: Promise<{ username: string
       
       <div className="flex flex-col">
         {loading ? (
-          // Feed skeleton
           <>
-            {[1, 2, 3].map((i) => (
-              <div key={i} className="flex flex-col w-full p-3">
-                <div className="flex flex-row px-3">
-                  <div className="w-5 h-5 rounded-full bg-gray-200 animate-pulse mr-4 flex-shrink-0" />
-                  <div className="w-24 h-5 bg-gray-200 animate-pulse rounded mr-2" />
-                  <div className="w-32 h-5 bg-gray-200 animate-pulse rounded" />
-                  <div className="ml-auto w-28 h-5 bg-gray-200 animate-pulse rounded" />
-                </div>
-                <div className="flex flex-row p-2 bg-gray-200 rounded mt-2 h-24 animate-pulse">
-                  <div className="w-[100px] h-[100px] bg-gray-300 rounded-lg mr-4 flex-shrink-0" />
-                  <div className="flex flex-col flex-1 gap-2">
-                    <div className="w-3/4 h-6 bg-gray-300 rounded" />
-                    <div className="w-full h-4 bg-gray-300 rounded" />
-                  </div>
-                </div>
-              </div>
+            {[...Array(5)].map((_, i) => (
+              <FeedSkeleton key={i} />
             ))}
           </>
         ) : (
