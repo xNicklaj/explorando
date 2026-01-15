@@ -5,6 +5,8 @@ import { motion } from "motion/react"
 import { IoMdArrowRoundBack } from "react-icons/io";
 import { useRouter, usePathname } from "next/navigation";
 
+import { useHaptic } from "react-haptic";
+
 interface HeaderProps {
   className?: string;
 }
@@ -13,8 +15,11 @@ export const Header: React.FC<HeaderProps> = ({ className }) => {
   const router = useRouter();
   const pathname = usePathname();
   const showBack = pathname !== "/";
+  const { vibrate } = useHaptic();
+
 
   const handleClick = () => {
+    vibrate();
     router.back();
   };
 

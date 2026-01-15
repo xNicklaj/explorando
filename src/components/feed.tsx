@@ -2,6 +2,8 @@ import Image from "next/image";
 import { motion } from "framer-motion";
 import Link from "next/link";
 
+import { useHaptic } from "react-haptic";
+
 type FeedData = {
     Date: any,
     Username: string,
@@ -14,6 +16,8 @@ type FeedData = {
 }
 
 const Feed = (data: FeedData) => {
+    const { vibrate } = useHaptic();
+
     const formatDate = (date: any) => {
         let jsDate: Date;
         
@@ -54,7 +58,7 @@ const Feed = (data: FeedData) => {
                 <span className="text-gray-600">{data.FeedContext}</span>
                 <span className="ml-auto">{formatDate(data.Date)}</span>
             </div>
-            <Link className="flex flex-row p-2 bg-gray-300 rounded mt-2" href={`/activity/${data.ActivityId}`}>
+            <Link className="flex flex-row p-2 bg-gray-300 rounded mt-2" href={`/activity/${data.ActivityId}`} onClick={() => vibrate()}>
                 <Image 
                     src={data.FeedIcon}
                     alt="Feed Icon"

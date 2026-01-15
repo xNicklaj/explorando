@@ -8,6 +8,8 @@ import { FaPeopleGroup } from "react-icons/fa6";
 import { IoIosPerson } from "react-icons/io";
 import { getCurrentUser } from "@/models/user";
 
+import { useHaptic } from "react-haptic";
+
 interface FooterProps {
     className?: string;
 }
@@ -17,6 +19,8 @@ export const Footer: React.FC<FooterProps> = ({ className } ) => {
   const [avatarDefault, setAvatarDefault] = useState<string | null>(null);
   const [avatarActive, setAvatarActive] = useState<string | null>(null);
   const [currentUsername, setCurrentUsername] = useState<string | null>(null);
+
+  const { vibrate } = useHaptic();
 
   const navItems = [
     { href: "/", icon: FaHome },
@@ -66,6 +70,7 @@ export const Footer: React.FC<FooterProps> = ({ className } ) => {
             key={href} 
             href={href}
             className={isActive ? "text-accent-500" : ""}
+            onClick={() => vibrate()}
           >
             {isProfile && avatarSrc ? (
               <img 
