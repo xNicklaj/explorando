@@ -1,5 +1,5 @@
 import { doc, getDoc, getDocs, query, where, collection, DocumentReference, Timestamp, orderBy } from 'firebase/firestore';
-import { db } from '../lib/firebase';
+import { db } from '@/lib/firebase';
 
 export interface FeedData {
   id: string;

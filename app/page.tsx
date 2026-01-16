@@ -12,9 +12,9 @@ import {
 
 import { db, rtdb } from '@/lib/firebase';
 import { trimWrappingQuotes } from '@/utils/text';
-import { InstallButton } from '@/src/components/install-button';
-import { CountdownTimer } from '@/src/components/countdown-timer';
-import { PreviewCard } from '@/src/components/preview-card';
+import { InstallButton } from '@/components/install-button';
+import { CountdownTimer } from '@/components/countdown-timer';
+import { PreviewCard } from '@/components/preview-card';
 
 interface BeforeInstallPromptEvent extends Event {
   prompt: () => Promise<void>;

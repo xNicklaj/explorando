@@ -5,8 +5,8 @@ import { getCurrentUser, getUserData, UserData } from '@/models/user';
 import { doc } from 'firebase/firestore';
 import { db } from '@/lib/firebase';
 import { getActivityById, getActivityByRef } from '@/models/activity';
-import Feed from '@/src/components/feed';
-import { FeedSkeleton } from '@/src/components/feed-skeleton';
+import Feed from '@/components/feed';
+import { FeedSkeleton } from '@/components/feed-skeleton';
 import { useEffect, useState } from 'react';
 
 interface EnrichedFeedData {

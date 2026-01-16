@@ -1,5 +1,5 @@
 import { doc, getDoc, DocumentReference, GeoPoint } from 'firebase/firestore';
-import { db } from '../lib/firebase';
+import { db } from '@/lib/firebase';
 
 export interface QuizData {
   Ans0: string;

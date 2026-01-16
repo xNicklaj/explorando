@@ -1,4 +1,4 @@
-import "../app/globals.css";
+import "@/app/globals.css";
 import * as NextImage from "next/image";
 import * as NextNavigation from "next/navigation";
 

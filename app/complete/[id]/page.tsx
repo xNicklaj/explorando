@@ -1,5 +1,5 @@
 import { db, rtdb } from '@/lib/firebase';
-import { QuizWrapper } from '@/src/components/quiz-wrapper';
+import { QuizWrapper } from '@/components/quiz-wrapper';
 import { doc, getDoc } from 'firebase/firestore';
 import { ref, get } from 'firebase/database';
 

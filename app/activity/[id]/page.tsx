@@ -1,9 +1,9 @@
 import { db } from '@/lib/firebase';
 import { doc, getDoc } from 'firebase/firestore';
 
-import { Button } from '@/src/components/custom-button';
-import { ImageCarousel } from '@/src/components/image-carousel';
-import { DistanceDisplay } from '@/src/components/distance-display';
+import { Button } from '@/components/custom-button';
+import { ImageCarousel } from '@/components/image-carousel';
+import { DistanceDisplay } from '@/components/distance-display';
 
 import { FaPlay } from "react-icons/fa";
 import { FaCalendarAlt } from "react-icons/fa";

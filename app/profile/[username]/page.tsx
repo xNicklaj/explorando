@@ -6,8 +6,8 @@ import { use, useEffect, useState } from 'react';
 import { collection, getDocs, query, where, doc, getDoc, orderBy } from 'firebase/firestore';
 import { db } from '@/lib/firebase';
 import { levelFromXp } from '@/lib/level';
-import Feed from '@/src/components/feed';
-import { FeedSkeleton } from '@/src/components/feed-skeleton';
+import Feed from '@/components/feed';
+import { FeedSkeleton } from '@/components/feed-skeleton';
 
 interface UserData {
   username: string;
@@ -132,7 +132,7 @@ export default function Profile({ params }: { params: Promise<{ username: string
   return (
     <div className="flex h-full bg-white font-sans flex-col">     
       <div className="flex flex-col w-full text-black">
-        <div className="flex flex-row p-4">
+        <div className="flex flex-row p-4 pt-0">
           {/* Avatar */}
           {loading ? (
             <div className="w-[6px] h-[60px] m-4 rounded-full bg-gray-200 animate-pulse flex-shrink-0" />
@@ -203,7 +203,7 @@ export default function Profile({ params }: { params: Promise<{ username: string
         </div>
       </div>
       
-      <div className="bg-black w-full h-1"></div>
+      <div className="bg-gray-200 w-full h-1"></div>
       
       <div className="flex flex-col">
         {loading ? (

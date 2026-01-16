@@ -5,11 +5,11 @@ import dynamic from 'next/dynamic';
 import { useRouter } from 'next/navigation';
 import { db } from '@/lib/firebase';
 import { doc, getDoc } from 'firebase/firestore';
-import { Button } from '@/src/components/custom-button';
+import { Button } from '@/components/custom-button';
 import { getHaversineDistance } from '@/lib/haversine';
 import { useGeolocation } from '@/hooks/useGeolocation';
 
-const MapContent = dynamic(() => import('@/src/components/map-content').then(mod => ({ default: mod.MapContent })), {
+const MapContent = dynamic(() => import('@/components/map-content').then(mod => ({ default: mod.MapContent })), {
     ssr: false,
     loading: () => <div className="w-full h-screen bg-gray-200 animate-pulse" />
 });
@@ -57,24 +57,32 @@ export default function MapPage({ params }: { params: Promise<{ id: string }> })
 
     console.log('MapPage: rendering MapContent');
     
-    const remainingDistance = activityData && loc.position 
+    // If we don't yet have a geolocation, leave remainingDistance as null
+    // (previously it defaulted to 0 which incorrectly treated unknown location as "near")
+    const remainingDistance: number | null = activityData && loc.position
         ? getHaversineDistance(activityData, {
             latitude: loc.position.latitude,
             longitude: loc.position.longitude
         })
-        : 0;
+        : null;
     //const remainingDistance = 0.1;
-    const walkingTime = formatWalkingTime(remainingDistance);
+    const walkingTime = typeof remainingDistance === 'number' ? formatWalkingTime(remainingDistance) : null;
     
     return (
         <div className="w-full h-screen flex flex-col">
             <MapContent activityData={activityData} className='max-h-1/2'/>
             <div className="flex flex-col p-4 text-black justify-center items-center align-middle">
                 {
-                    remainingDistance <= 0.2 ? (
+                    // If we don't have a location yet, don't allow proceeding — show waiting state
+                    remainingDistance === null ? (
+                        <>
+                            <span className="text-lg">Individuando la posizione. Attendi...</span>
+                            <Button className="text-xl bold mt-10" onClick={() => router.back()}>Interrompi percorso</Button>
+                        </>
+                    ) : remainingDistance <= 0.2 ? (
                         <>
                             <span className="text-lg">Sei vicino!</span>
-                            <Button className="text-xl bold mt-10" href={"/complete/" + id}>Vai al quiz</Button>
+                            <Button className="text-xl bold mt-10" href={`/complete/${id}`}>Vai al quiz</Button>
                         </>
                     ) : (
                         <>

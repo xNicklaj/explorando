@@ -1,6 +1,6 @@
 import { ref, get } from 'firebase/database';
 import { doc, getDoc, DocumentReference, collection, query, where, getDocs } from 'firebase/firestore';
-import { rtdb, db } from '../lib/firebase';
+import { rtdb, db } from '@/lib/firebase';
 
 export interface UserData {
   id: string;
@@ -10,6 +10,7 @@ export interface UserData {
   Friends: DocumentReference[];
   Username: string;
   XP: number;
+  Points: number;
 }
 
 /**
