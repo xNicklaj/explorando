@@ -59,7 +59,7 @@ export const Header: React.FC<HeaderProps> = ({ className }) => {
   };
 
   return (
-    <div className={`relative flex flex-row w-full p-5 text-black bg-white text-2xl ${className || ""} sticky top-0`}>
+    <div className={`relative flex flex-row w-full p-3 text-black bg-white text-2xl ${className || ""} sticky top-0`}>
         {showBack && (
         <motion.button 
             className="cursor-pointer" 
@@ -74,7 +74,10 @@ export const Header: React.FC<HeaderProps> = ({ className }) => {
             e<span className="text-accent-500">X</span>plorando
         </span>
         <div className="ml-auto">
-          <Button href="/shop" className="bg-yellow-500 text-base px-2 py-1 border-yellow-700 border gap-0" layoutClass="flex justify-center align-center"><Image src="/token.png" alt="Token" width={30} height={30}/>{points}</Button>
+          <Button href="/shop" className="bg-yellow-500 text-base px-2 py-1 border-yellow-700 border gap-0" layoutClass="flex justify-center align-center">
+            <Image src="/token.png" alt="Token" width={24} height={24}/>
+            {points}
+          </Button>
         </div>
     </div>
   );
