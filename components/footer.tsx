@@ -24,10 +24,10 @@ export const Footer: React.FC<FooterProps> = ({ className } ) => {
   const { vibrate } = useHaptic();
 
   const navItems = [
-    { href: "/", icon: FaHome },
-    { href: "/events", icon: FaCalendarDay },
-    { href: "/community", icon: FaPeopleGroup },
-    { href: "/me", icon: IoIosPerson },
+    { href: "/", icon: FaHome, label: "Home" },
+    { href: "/events", icon: FaCalendarDay, label: "Eventi" },
+    { href: "/community", icon: FaPeopleGroup, label: "Community" },
+    { href: "/me", icon: IoIosPerson, label: "Account" },
   ];
 
   useEffect(() => {
@@ -55,8 +55,8 @@ export const Footer: React.FC<FooterProps> = ({ className } ) => {
   }, []);
 
   return (
-    <footer className={`flex w-full p-4 text-black bg-white justify-around text-3xl ${className || ""}`}>
-      {navItems.map(({ href, icon: Icon }) => {
+    <footer className={`flex w-full p-2 text-black bg-white justify-around text-3xl ${className || ""}`}>
+      {navItems.map(({ href, icon: Icon, label }) => {
         const isActive = pathname === href;
         const isProfile = href === "/me" || href === "/profile";
         
@@ -71,7 +71,7 @@ export const Footer: React.FC<FooterProps> = ({ className } ) => {
           <Link 
             key={href} 
             href={href}
-            className={isActive ? "text-accent-500" : ""}
+            className={`flex flex-col items-center gap-1 ${isActive ? "text-accent-500" : "text-zinc-700"}`}
             onClick={() => vibrate()}
           >
             {isProfile && avatarSrc ? (
@@ -83,6 +83,7 @@ export const Footer: React.FC<FooterProps> = ({ className } ) => {
             ) : (
               <Icon />
             )}
+            <span className={`text-[11px] leading-none ${isActive ? "font-semibold" : "font-medium"}`}>{label}</span>
           </Link>
         );
       })}
