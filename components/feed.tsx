@@ -45,26 +45,28 @@ const Feed = (data: FeedData) => {
     return (
         <motion.div className="flex flex-col w-full p-3 text-black" initial={{ opacity: 0, x: 10 }} animate={{ opacity: 1, x: 0 }} transition={{ duration: 0.3, ease: "easeOut", delay: 0.1 }}>
             <div className="flex flex-row px-3">
-                <div className="mr-1">
+                <Link href={`/profile/${data.Username}`} className="mr-1 flex-shrink-0">
                     <Image 
                         src={data.UserAvatar}
                         alt="User Avatar"
                         width={20}
                         height={20}
-                        className="rounded-full flex-shrink-0"
+                        className="rounded-full"
                     />
-                </div>
-                <span className="text-accent-500 mr-1">{data.Username}</span>
+                </Link>
+                <Link href={`/profile/${data.Username}`} className="cursor-pointer">
+                    <span className="text-accent-500 mr-1 hover:opacity-80">{data.Username}</span>
+                </Link>
                 <span className="text-gray-600">{data.FeedContext}</span>
                 <span className="ml-auto">{formatDate(data.Date)}</span>
             </div>
-            <Link className="flex flex-row p-2 bg-gray-300 rounded mt-2" href={`/activity/${data.ActivityId}`} onClick={() => vibrate()}>
+            <Link className="flex flex-row p-2 bg-white shadow-sm border border-gray-200 rounded mt-2" href={`/activity/${data.ActivityId}`} onClick={() => vibrate()}>
                 <Image 
                     src={data.FeedIcon}
                     alt="Feed Icon"
                     width={100}
                     height={100}
-                    className="rounded-lg mr-2 flex-shrink-0 object-cover"
+                    className="rounded mr-2 flex-shrink-0 object-cover"
                 />
                 <div className="flex flex-col">
                     <h2 className="text-xl">{data.FeedTitle}</h2>

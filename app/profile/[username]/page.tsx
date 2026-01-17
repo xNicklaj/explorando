@@ -203,7 +203,7 @@ export default function Profile({ params }: { params: Promise<{ username: string
         </div>
       </div>
       
-      <div className="bg-gray-200 w-full h-1"></div>
+      <div className="bg-gray-200 w-full h-1 text-transparent">.</div>
       
       <div className="flex flex-col">
         {loading ? (

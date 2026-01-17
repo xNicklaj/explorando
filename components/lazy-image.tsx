@@ -12,7 +12,7 @@ export function LazyImage({ className = '', alt, ...props }: LazyImageProps) {
     const [isLoading, setIsLoading] = useState(true);
 
     return (
-        <div className="relative">
+        <div className="relative w-full h-full">
             {isLoading && (
                 <div className="absolute inset-0 bg-gray-200 animate-pulse" />
             )}

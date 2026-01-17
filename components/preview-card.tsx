@@ -20,15 +20,19 @@ export const PreviewCard: React.FC<PreviewCardProps> = ({
 
     return (
         <Link href={linkUrl || ''}>
-            <motion.button 
-            className="text-black flex flex-col cursor-pointer"
+            <motion.div 
+            className="bg-white rounded-lg overflow-hidden shadow-md hover:shadow-lg transition-shadow cursor-pointer"
             initial={{ opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
             onClick={() => vibrate()}
             >
-                <LazyImage src={imageUrl || ''} alt={title} width={250} height={250} className="bg-gray-400 m-2 text-white rounded-xl w-[250px] h-[250px] object-cover"/>
-                <span className="text-left px-3 pb-2 text-xl">{title}</span>
-            </motion.button>
+              <div className="relative w-full h-48">
+                <LazyImage src={imageUrl || ''} alt={title} fill className="object-cover"/>
+              </div>
+              <div className="p-4">
+                <h3 className="text-lg font-semibold text-gray-900 truncate">{title}</h3>
+              </div>
+            </motion.div>
         </Link>
 );
 };
