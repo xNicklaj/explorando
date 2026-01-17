@@ -13,6 +13,7 @@ import { FaUserFriends, FaCalendarAlt, FaCheck, FaBell, FaChevronRight } from 'r
 import { IoSend } from 'react-icons/io5';
 import { useHaptic } from 'react-haptic';
 import { motion } from 'framer-motion';
+import { toast } from 'sonner';
 
 interface ChatMessageData {
   User: UserData;
@@ -107,6 +108,7 @@ export default function EventPage({ params }: { params: Promise<{ id: string }> 
         });
         setIsSubscribed(true);
         setSubscribers((prev) => prev + 1);
+        toast('Ti notificheremo poco prima dell\'evento!');
       }
     } catch (err: any) {
       console.error('Failed to toggle subscription:', err);
