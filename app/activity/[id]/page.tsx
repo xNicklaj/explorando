@@ -1,6 +1,6 @@
 import { db } from '@/lib/firebase';
 import { doc, getDoc } from 'firebase/firestore';
-
+import { isActivityEnabled } from '@/models/activity';
 import { Button } from '@/components/custom-button';
 import { ImageCarousel } from '@/components/image-carousel';
 import { DistanceDisplay } from '@/components/distance-display';
@@ -14,6 +14,7 @@ export default async function ActivityDetail({ params }: { params: Promise<{ id:
 
     const activityDoc = await getDoc(doc(db, 'Activity', id));
     const activityData = activityDoc.exists() ? activityDoc.data() : null;
+    const isEnabled = await isActivityEnabled(id);
 
     if (!activityData) {
         return (
@@ -35,7 +36,7 @@ export default async function ActivityDetail({ params }: { params: Promise<{ id:
                 <div className="px-6 pb-6">{activityData["Description"]}</div>
             </div>
             <div className="p-6 pt-0 flex w-full flex-col gap-2">
-                <Button layoutClass="w-full" href={`/map/${id}`}><FaPlay />Avvia</Button>
+                <Button layoutClass="w-full" href={`/map/${id}`} enabled={isEnabled} className={!isEnabled ? 'bg-gray-400 hover:bg-gray-400' : ''}><FaPlay />Avvia</Button>
                 <div className="flex flex-row w-full gap-2">
                     <Button layoutClass="w-full"><FaCalendarAlt />Partecipa</Button>
                 </div>

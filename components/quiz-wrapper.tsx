@@ -1,13 +1,14 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, type FormEvent } from 'react';
 import { useRouter } from 'next/navigation';
 import Quiz from './quiz-component';
 import { motion } from 'motion/react';
 import { getLevelInfo } from '@/lib/level';
 import { db, rtdb } from '@/lib/firebase';
-import { doc, updateDoc } from 'firebase/firestore';
+import { doc, updateDoc, Timestamp, addDoc, collection } from 'firebase/firestore';
 import { ref, get } from 'firebase/database';
+import { useHaptic } from 'react-haptic';
 
 type QuizData = {
     Question: string;
@@ -17,12 +18,16 @@ type QuizData = {
     Correct: number;
 }
 
-export function QuizWrapper({ quizData, totalXP, currentXp = 0 }: { quizData: QuizData[], totalXP: number, currentXp?: number }) {
+export function QuizWrapper({ quizData, totalXP, currentXp = 0, activityId }: { quizData: QuizData[], totalXP: number, currentXp?: number, activityId: string }) {
     const router = useRouter();
+    const { vibrate } = useHaptic();
     const [currentQuiz, setCurrentQuiz] = useState(0);
     const [passedQuizzes, setPassedQuizzes] = useState(0);
     const [isComplete, setIsComplete] = useState(false);
     const [xpSaved, setXpSaved] = useState(false);
+    const [feedContent, setFeedContent] = useState('');
+    const [isSubmittingFeed, setIsSubmittingFeed] = useState(false);
+    const [showFeedForm, setShowFeedForm] = useState(false);
     const totalQuizzes = quizData.length || 1;
 
     const handleSubmit = (selectedAnswer: number) => {
@@ -68,16 +73,34 @@ export function QuizWrapper({ quizData, totalXP, currentXp = 0 }: { quizData: Qu
         }
     }, [isComplete, xpSaved, totalXP, passedQuizzes, totalQuizzes, currentXp]);
 
-    // Navigate to home after 7 seconds
-    useEffect(() => {
-        if (isComplete) {
-            const timer = setTimeout(() => {
-                router.push('/');
-            }, 7000);
+    // Handle feed submission
+    const handleFeedSubmit = async (e: FormEvent) => {
+        e.preventDefault();
+        vibrate();
+        setIsSubmittingFeed(true);
+        
+        try {
+            const userIdSnapshot = await get(ref(rtdb, 'userid'));
+            if (!userIdSnapshot.exists()) {
+                throw new Error('User ID not found');
+            }
             
-            return () => clearTimeout(timer);
+            const userId = userIdSnapshot.val();
+            
+            await addDoc(collection(db, 'Feed'), {
+                Activity: doc(db, 'Activity', activityId),
+                User: doc(db, 'User', userId),
+                Datetime: Timestamp.now(),
+                Comment: feedContent
+            });
+            
+            console.log('Feed created successfully');
+            router.push('/');
+        } catch (error) {
+            console.error('Failed to create feed:', error);
+            setIsSubmittingFeed(false);
         }
-    }, [isComplete, router]);
+    };
 
     if (isComplete) {
         const earnedXP = Math.max(3, Math.round(totalXP * (passedQuizzes / totalQuizzes)));
@@ -141,6 +164,36 @@ export function QuizWrapper({ quizData, totalXP, currentXp = 0 }: { quizData: Qu
                         </motion.p>
                     )}
                 </div>
+                
+                <motion.form
+                    onSubmit={handleFeedSubmit}
+                    className="w-full max-w-md mt-6 flex flex-col gap-3"
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0, transition: { delay: 0.8 } }}
+                >
+                    <label className="text-sm font-medium">Condividi la tua esperienza</label>
+                    <div className="relative w-full">
+                        <textarea
+                            value={feedContent}
+                            onChange={(e) => setFeedContent(e.target.value)}
+                            placeholder="Scrivi qualcosa sulla tua esperienza..."
+                            className="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-500 resize-none h-24"
+                            maxLength={90}
+                            required
+                        />
+                        <div className="pointer-events-none absolute right-2 bottom-2 text-xs text-gray-500">
+                            {feedContent.length}/90
+                        </div>
+                    </div>
+                    <button
+                        type="submit"
+                        disabled={isSubmittingFeed}
+                        className="w-full bg-orange-500 hover:bg-orange-600 disabled:bg-gray-400 text-white font-medium py-2 px-4 rounded-lg transition"
+                        onClick={() => vibrate()}
+                    >
+                        {isSubmittingFeed ? 'Salvataggio...' : 'Condividi'}
+                    </button>
+                </motion.form>
             </div>
         );
     }

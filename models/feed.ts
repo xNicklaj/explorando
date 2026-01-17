@@ -1,4 +1,4 @@
-import { doc, getDoc, getDocs, query, where, collection, DocumentReference, Timestamp, orderBy } from 'firebase/firestore';
+import { doc, getDoc, getDocs, query, where, collection, DocumentReference, Timestamp, orderBy, addDoc } from 'firebase/firestore';
 import { db } from '@/lib/firebase';
 
 export interface FeedData {
@@ -64,5 +64,23 @@ async function fetchUserFeed(userRef: DocumentReference): Promise<FeedData[]> {
   } catch (err: any) {
     console.error('Failed to fetch feed:', err);
     throw new Error(err.message || 'Failed to fetch feed');
+  }
+}
+
+/**
+ * Creates and pushes a new feed item to the database
+ */
+export async function createFeedItem(
+  data: Omit<FeedData, 'id'>
+): Promise<FeedData> {
+  try {
+    const docRef = await addDoc(collection(db, 'Feed'), data);
+    return {
+      id: docRef.id,
+      ...data,
+    } as FeedData;
+  } catch (err: any) {
+    console.error('Failed to create feed item:', err);
+    throw new Error(err.message || 'Failed to create feed item');
   }
 }

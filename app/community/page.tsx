@@ -27,13 +27,17 @@ export default function Profile() {
         const currentUser = await getCurrentUser();
         setUserData(currentUser);
 
-        if (currentUser && currentUser.Friends && currentUser.Friends.length > 0) {
+        if (currentUser) {
           try {
-            // Fetch feed from all friends in parallel
-            const feedPromises = currentUser.Friends.map((friendRef) =>
+            // Always include current user's feed
+            const selfFeedPromise = getFeedByUserRef(doc(db, 'User', currentUser.id));
+
+            // Fetch friend feeds (if any) in parallel
+            const friendFeedPromises = (currentUser.Friends || []).map((friendRef) =>
               getFeedByUserRef(friendRef)
             );
-            const allFeedArrays = await Promise.all(feedPromises);
+
+            const allFeedArrays = await Promise.all([selfFeedPromise, ...friendFeedPromises]);
 
             // Flatten all feed arrays into one
             const allFeed = allFeedArrays.flat();
@@ -60,8 +64,8 @@ export default function Profile() {
 
             setEnrichedFeed(enrichedData);
           } catch (err: any) {
-            console.error('Failed to fetch friend feeds:', err);
-            setError(err.message || 'Failed to fetch friend feeds');
+            console.error('Failed to fetch feeds:', err);
+            setError(err.message || 'Failed to fetch feeds');
           }
         }
       } catch (err: any) {

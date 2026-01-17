@@ -1,5 +1,5 @@
 import { ref, get } from 'firebase/database';
-import { doc, getDoc, DocumentReference, collection, query, where, getDocs } from 'firebase/firestore';
+import { doc, getDoc, DocumentReference, collection, query, where, getDocs, addDoc } from 'firebase/firestore';
 import { rtdb, db } from '@/lib/firebase';
 
 export interface UserData {
@@ -98,5 +98,23 @@ export async function getUserData(
   } catch (err: any) {
     console.error('Failed to fetch user data:', err);
     throw new Error(err.message || 'Failed to fetch user data');
+  }
+}
+
+/**
+ * Creates and pushes a new user to the database
+ */
+export async function createUser(
+  data: Omit<UserData, 'id'>
+): Promise<UserData> {
+  try {
+    const docRef = await addDoc(collection(db, 'User'), data);
+    return {
+      id: docRef.id,
+      ...data,
+    } as UserData;
+  } catch (err: any) {
+    console.error('Failed to create user:', err);
+    throw new Error(err.message || 'Failed to create user');
   }
 }

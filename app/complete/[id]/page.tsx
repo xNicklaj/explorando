@@ -31,5 +31,5 @@ export default async function CompletePage({ params }: { params: Promise<{ id: s
         console.error('Failed to fetch user XP:', error);
     }
     
-    return <QuizWrapper quizData={quizData} totalXP={totalXP} currentXp={currentXp} />;
+    return <QuizWrapper quizData={quizData} totalXP={totalXP} currentXp={currentXp} activityId={id} />;
 }

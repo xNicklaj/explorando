@@ -1,5 +1,6 @@
-import { doc, getDoc, DocumentReference, GeoPoint } from 'firebase/firestore';
-import { db } from '@/lib/firebase';
+import { doc, getDoc, DocumentReference, GeoPoint, addDoc, collection } from 'firebase/firestore';
+import { db, rtdb } from '@/lib/firebase';
+import { ref, get } from 'firebase/database';
 
 export interface QuizData {
   Ans0: string;
@@ -75,5 +76,51 @@ export async function getActivityByRef(activityRef: DocumentReference | any): Pr
   } catch (err: any) {
     console.error('Failed to fetch activity:', err);
     throw new Error(err.message || 'Failed to fetch activity');
+  }
+}
+
+/**
+ * Creates and pushes a new activity to the database
+ */
+export async function createActivity(
+  data: Omit<ActivityData, 'id'>
+): Promise<ActivityData> {
+  try {
+    const docRef = await addDoc(collection(db, 'Activity'), data);
+    return {
+      id: docRef.id,
+      ...data,
+    } as ActivityData;
+  } catch (err: any) {
+    console.error('Failed to create activity:', err);
+    throw new Error(err.message || 'Failed to create activity');
+  }
+}
+
+/**
+ * Checks if an activity is currently enabled by polling the rtdb
+ */
+export async function isActivityEnabled(activityId: string): Promise<boolean> {
+  try {
+    const enabledActivitiesRef = ref(rtdb, 'currently-enabled-activities');
+    const snapshot = await get(enabledActivitiesRef);
+
+    if (!snapshot.exists()) {
+      return false;
+    }
+
+    const enabledActivities = snapshot.val();
+
+    // Handle both array and object formats
+    if (Array.isArray(enabledActivities)) {
+      return enabledActivities.includes(activityId);
+    } else if (typeof enabledActivities === 'object') {
+      return Object.values(enabledActivities).includes(activityId);
+    }
+
+    return false;
+  } catch (err: any) {
+    console.error('Failed to check if activity is enabled:', err);
+    return false;
   }
 }
