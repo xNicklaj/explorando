@@ -18,7 +18,7 @@ type QuizData = {
     Correct: number;
 }
 
-export function QuizWrapper({ quizData, totalXP, currentXp = 0, activityId }: { quizData: QuizData[], totalXP: number, currentXp?: number, activityId: string }) {
+export function QuizWrapper({ quizData, totalXP, currentXp = 0, currentPoints = 0, activityId }: { quizData: QuizData[], totalXP: number, currentXp?: number, currentPoints?: number, activityId: string }) {
     const router = useRouter();
     const { vibrate } = useHaptic();
     const [currentQuiz, setCurrentQuiz] = useState(0);
@@ -53,25 +53,28 @@ export function QuizWrapper({ quizData, totalXP, currentXp = 0, activityId }: { 
             const saveXP = async () => {
                 try {
                     const earnedXP = Math.max(3, Math.round(totalXP * (passedQuizzes / totalQuizzes)));
+                    const earnedPoints = earnedXP * 2; // Double the XP as points
                     const finalXp = currentXp + earnedXP;
+                    const finalPoints = currentPoints + earnedPoints;
                     
                     const userIdSnapshot = await get(ref(rtdb, 'userid'));
                     if (userIdSnapshot.exists()) {
                         const userId = userIdSnapshot.val();
                         await updateDoc(doc(db, 'User', userId), {
-                            XP: finalXp
+                            XP: finalXp,
+                            Points: finalPoints
                         });
                         setXpSaved(true);
-                        console.log('XP saved successfully:', finalXp);
+                        console.log('XP and Points saved successfully:', { XP: finalXp, Points: finalPoints });
                     }
                 } catch (error) {
-                    console.error('Failed to save XP:', error);
+                    console.error('Failed to save XP and Points:', error);
                 }
             };
             
             saveXP();
         }
-    }, [isComplete, xpSaved, totalXP, passedQuizzes, totalQuizzes, currentXp]);
+    }, [isComplete, xpSaved, totalXP, passedQuizzes, totalQuizzes, currentXp, currentPoints]);
 
     // Handle feed submission
     const handleFeedSubmit = async (e: FormEvent) => {
@@ -104,6 +107,7 @@ export function QuizWrapper({ quizData, totalXP, currentXp = 0, activityId }: { 
 
     if (isComplete) {
         const earnedXP = Math.max(3, Math.round(totalXP * (passedQuizzes / totalQuizzes)));
+        const earnedPoints = earnedXP * 2;
         const finalXp = currentXp + earnedXP;
         const previousLevel = getLevelInfo(currentXp).level;
         const info = getLevelInfo(finalXp);
@@ -119,13 +123,22 @@ export function QuizWrapper({ quizData, totalXP, currentXp = 0, activityId }: { 
                 >
                     Attività completata!
                 </motion.h2>
-                <motion.p
-                    className="text-xl"
-                    initial={{ opacity: 0, y: 20 }}
-                    animate={{ opacity: 1, y: 0, transition: { delay: 0.4 } }}
-                >
-                    +{earnedXP} XP
-                </motion.p>
+                <div className="flex flex-col items-center gap-2">
+                    <motion.p
+                        className="text-xl"
+                        initial={{ opacity: 0, y: 20 }}
+                        animate={{ opacity: 1, y: 0, transition: { delay: 0.4 } }}
+                    >
+                        +{earnedXP} XP
+                    </motion.p>
+                    <motion.div
+                        className="flex items-center gap-2"
+                        initial={{ opacity: 0, y: 20 }}
+                        animate={{ opacity: 1, y: 0, transition: { delay: 0.5 } }}
+                    >
+                        <p className="text-xl">+{earnedPoints}</p><img src="/token.png" alt="Points" className="w-6 h-6" />
+                    </motion.div>
+                </div>
                 <div className="w-full max-w-md flex flex-col items-center gap-3 mt-2">
                     <div className="w-full flex items-center gap-3 justify-center">
                         <span className="text-xl font-medium">{info.level}</span>

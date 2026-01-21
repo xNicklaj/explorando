@@ -16,8 +16,9 @@ export default async function CompletePage({ params }: { params: Promise<{ id: s
     const quizData = activityData["Quiz"] || [];
     const totalXP = activityData["XP"] || 0;
     
-    // Fetch current user's XP from Firebase
+    // Fetch current user's XP and Points from Firebase
     let currentXp = 0;
+    let currentPoints = 0;
     try {
         const userIdSnapshot = await get(ref(rtdb, 'userid'));
         if (userIdSnapshot.exists()) {
@@ -25,11 +26,12 @@ export default async function CompletePage({ params }: { params: Promise<{ id: s
             const userDoc = await getDoc(doc(db, 'User', userId));
             if (userDoc.exists()) {
                 currentXp = userDoc.data()["XP"] || 0;
+                currentPoints = userDoc.data()["Points"] || 0;
             }
         }
     } catch (error) {
-        console.error('Failed to fetch user XP:', error);
+        console.error('Failed to fetch user data:', error);
     }
     
-    return <QuizWrapper quizData={quizData} totalXP={totalXP} currentXp={currentXp} activityId={id} />;
+    return <QuizWrapper quizData={quizData} totalXP={totalXP} currentXp={currentXp} currentPoints={currentPoints} activityId={id} />;
 }
