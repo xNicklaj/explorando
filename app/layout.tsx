@@ -56,6 +56,7 @@ export default async function RootLayout({
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased flex flex-col h-[100dvh] overflow-hidden ${isIosDevice ? 'pb-5' : ''}`}
         data-rm-theme="light"
+        suppressHydrationWarning
       >
         <Header />
         <main className="flex-1 overflow-y-auto">
