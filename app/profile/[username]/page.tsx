@@ -13,6 +13,7 @@ import { levelFromXp } from '@/lib/level';
 import Feed from '@/components/feed';
 import { FeedSkeleton } from '@/components/feed-skeleton';
 import FollowButton from '@/components/follow-button';
+import LevelDisplay from '@/components/level-display';
 import { getCurrentUser } from '@/models/user';
 
 interface UserData {
@@ -264,9 +265,8 @@ export default function Profile({ params }: { params: Promise<{ username: string
               ) : (
                 userData && (
                   <div className="w-full flex justify-center flex-1">
-                    <div className="ml-2 flex items-center justify-center w-16 h-16 rounded-full border-2 border-accent-500 text-accent-500 flex-col">
-                      <div className="text-xs font-semibold leading-tight">LIV</div>
-                      <div className="text-2xl font-bold leading-tight">{levelFromXp(userData["XP"])}</div>
+                    <div className="ml-2">
+                      <LevelDisplay xp={userData["XP"]} size={64} />
                     </div>
                   </div>
                 )
