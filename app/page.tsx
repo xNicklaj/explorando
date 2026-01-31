@@ -30,6 +30,10 @@ export default function Home() {
   const [categoryNames, setCategoryNames] = useState<Record<string, string>>({});
   const [loadingActivities, setLoadingActivities] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const isIos = useMemo(() => {
+    if (typeof navigator === 'undefined') return false;
+    return /iPad|iPhone|iPod/.test(navigator.userAgent);
+  }, []);
 
   useEffect(() => {
     // Listen for beforeinstallprompt event
@@ -267,7 +271,7 @@ export default function Home() {
       { installPrompt && !isInstalled && (
         <InstallButton
           onClick={handleInstall}
-          className="fixed bottom-18 left-0 right-0 shadow-lg"
+          className={`fixed ${isIos ? 'bottom-19' : 'bottom-14'} left-0 right-0 shadow-lg`}
         >
         </InstallButton>
       )}

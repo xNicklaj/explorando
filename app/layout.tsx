@@ -6,6 +6,7 @@ import { Header } from "@/components/header";
 import { Footer } from "@/components/footer";
 
 import { Toaster } from "sonner";
+import { isIos } from "@/lib/device-detection";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -40,18 +41,21 @@ export const metadata: Metadata = {
   },
 };
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const isIosDevice = await isIos();
+  
   return (
     <html lang="en" className="h-[100dvh]" suppressHydrationWarning>
       <head>
         <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover" />
       </head>
       <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased flex flex-col h-[100dvh] overflow-hidden`}
+        className={`${geistSans.variable} ${geistMono.variable} antialiased flex flex-col h-[100dvh] overflow-hidden ${isIosDevice ? 'pb-5' : ''}`}
+        data-rm-theme="light"
       >
         <Header />
         <main className="flex-1 overflow-y-auto">
