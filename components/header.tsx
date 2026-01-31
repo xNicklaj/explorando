@@ -88,7 +88,7 @@ export const Header: React.FC<HeaderProps> = ({ className }) => {
             e<span className="text-accent-500">X</span>plorando
         </span>
         <div className="ml-auto">
-          <Button href="/shop" className="bg-yellow-500 text-base px-2 py-1 border-yellow-700 border gap-0" layoutClass="flex justify-center align-center">
+          <Button href="/shop" className="bg-yellow-500 text-base px-2 py-1 border-yellow-700 border gap-0 shadow-lg" layoutClass="flex justify-center align-center">
             <Image src="/token.png" alt="Token" width={24} height={24}/>
             {points}
           </Button>
