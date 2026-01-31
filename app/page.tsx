@@ -267,7 +267,7 @@ export default function Home() {
       { installPrompt && !isInstalled && (
         <InstallButton
           onClick={handleInstall}
-          className="fixed bottom-0 left-0 right-0"
+          className="fixed bottom-18 left-0 right-0 shadow-lg"
         >
         </InstallButton>
       )}
