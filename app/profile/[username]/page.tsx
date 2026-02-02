@@ -221,14 +221,14 @@ export default function Profile({ params }: { params: Promise<{ username: string
               </div>
             ) : (
               badges && badges.length > 0 && (
-                <div className="flex flex-row gap-4 flex-wrap items-end">
+                <div className="flex flex-row gap-2 flex-wrap items-end">
                   {badges.map((badge: BadgeData) => (
                     <div key={badge.id} className="flex flex-col items-center">
                       <Image
                         src={badge.Image}
                         alt={badge.Name || "Badge"}
-                        width={35}
-                        height={35}
+                        width={50}
+                        height={50}
                         className="rounded-lg object-cover flex-shrink-0"
                       />
                     </div>
