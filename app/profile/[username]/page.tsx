@@ -5,7 +5,7 @@ import Image from 'next/image';
 import { use, useEffect, useState } from 'react';
 import { collection, getDocs, query, where, doc, getDoc, orderBy } from 'firebase/firestore';
 import { toast } from 'sonner';
-import { MdEdit, MdInventory2 } from 'react-icons/md';
+import { MdEdit, MdInventory2, MdMessage } from 'react-icons/md';
 import { motion } from 'motion/react';
 import { useHaptic } from 'react-haptic';
 import { db } from '@/lib/firebase';
@@ -189,6 +189,26 @@ export default function Profile({ params }: { params: Promise<{ username: string
     );
   };
 
+  const ChatButton = () => {
+    const { vibrate } = useHaptic();
+
+    const handleClick = () => {
+      vibrate();
+      toast('Funzionalità non implementata');
+    };
+
+    return (
+      <motion.button
+        whileTap={{ scale: 0.9 }}
+        className="px-6 py-2 rounded-lg font-semibold bg-gray-200 text-gray-700 hover:bg-gray-300 transition-colors flex flex-row items-center gap-2"
+        onClick={handleClick}
+      >
+        <MdMessage size={18} />
+        Chatta
+      </motion.button>
+    );
+  };
+
   console.log(badges);
 
   return (
@@ -284,7 +304,10 @@ export default function Profile({ params }: { params: Promise<{ username: string
                 <InventoryButton />
               </>
             ) : (
-              <FollowButton targetUserId={userData.id} />
+              <>
+                <FollowButton targetUserId={userData.id} />
+                <ChatButton />
+              </>
             )}
           </div>
         )}
